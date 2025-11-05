@@ -28,6 +28,7 @@ public:
     }
     explicit ABDQ(std::size_t capacity) {
         data_ = nullptr;
+        data_ = nullptr;
         capacity_ = capacity;
         size_ = 0;
         front_ = 0;

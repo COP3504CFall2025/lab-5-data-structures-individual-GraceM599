@@ -17,6 +17,8 @@ private:
 		Node() = default;
 		Node(T d) {
 			data = d;
+			prev = nullptr;
+			next = nullptr;
 		}
 	};
 	Node* head;

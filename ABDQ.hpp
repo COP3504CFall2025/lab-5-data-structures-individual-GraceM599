@@ -40,7 +40,7 @@ public:
         front_ = other.getFront();
         back_ = size_;
         for (int i=0; i<size_; ++i ) {
-            data_[(front_ + i) % size_] = other.data_[(front_ + i) % size_];
+            data_[(front_ + i) % capacity_] = other.data_[(front_ + i) % capacity_];
         }
 
     }
@@ -50,6 +50,11 @@ public:
         data_ = other.getData();
         front_ = other.getFront();
         back_ = other.getBack();
+        other.data_ = nullptr;
+        other.size_=0;
+        other.front_ = 0;
+        other.back_ = 0;
+        other.capacity_ =0;
     }
     ABDQ& operator=(const ABDQ& other) {
         if (this== &other) {
@@ -61,7 +66,7 @@ public:
         front_ = other.getFront();
         back_ = size_;
         for (int i=0; i<size_; ++i ) {
-            data_[(front_ + i) % size_] = other.getData()[(front_ + i) % size_];
+            data_[(front_ + i) % capacity_] = other.getData()[(front_ + i) % capacity_];
         }
         return *this;
     }
@@ -71,6 +76,7 @@ public:
         }
         capacity_ = other.getCapacity();
         size_ = other.getSize();
+        delete[] data_;
         data_ = other.getData();
         front_ = other.getFront();
         back_ = other.getBack();
@@ -95,8 +101,8 @@ public:
             pushFront(item);
         }
         else {
+            front_ = (front_ - 1 + capacity_) % capacity_;
             data_[front_] = item;
-            front_ = (front_ - 1 +capacity_) % capacity_;
             size_++;
         }
     }

@@ -52,7 +52,7 @@ public:
         curr_size_ = other.getSize();
         capacity_ = other.getMaxCapacity();
         array_ = other.getData();
-        other.data_ = nullptr;
+        other.array_ = nullptr;
         other.curr_size_ = 0;
         other.capacity_= 0;
 

@@ -18,7 +18,7 @@ public:
     }
     explicit ABS(const size_t capacity) {
         capacity_ = capacity;
-        curr_size_ = capacity;
+        curr_size_ = 0;
         array_ = new T[capacity];
     }
     ABS(const ABS& other) {
@@ -58,6 +58,7 @@ public:
         }
         capacity_ = rhs.getMaxCapacity();
         curr_size_= rhs.getSize();
+        delete[] array_;
         array_ = rhs.getData();
         //do i return the pointer or the object?
         return *this;
@@ -92,8 +93,13 @@ public:
         }
         else if (curr_size_ >= capacity_) {
             capacity_ *= scale_factor_;
-            delete[] array_;
+            temp = array_;
             array_ = new T[capacity_];
+            for (int i=0; i<curr_size_; ++i) {
+                array_[i] = temp[i];
+            }
+            delete[] temp;
+
         }
         array_[curr_size_] = data;
         curr_size_ +=1;
@@ -103,14 +109,14 @@ public:
         if (curr_size_ == 0) {
             throw std::runtime_error("Empty ABS");
         }
-        return array_[curr_size_];
+        return array_[curr_size_-1];
     }
 
     T pop() override {
         if (curr_size_ == 0) {
             throw std::runtime_error("Empty ABS");
         }
-        T temp = array_[curr_size_];
+        T temp = array_[curr_size_-1];
         curr_size_ -=1;
         return temp;
     }

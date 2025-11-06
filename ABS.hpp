@@ -49,6 +49,7 @@ public:
         capacity_ = other.getMaxCapacity();
         curr_size_= other.getSize();
         array_ = other.getData();
+        other.setData(nullptr);
         //do i not have to set things to nullptr??? no setters...
 
     }
@@ -60,6 +61,8 @@ public:
         curr_size_= rhs.getSize();
         delete[] array_;
         array_ = rhs.getData();
+        rhs.setData(nullptr);
+
         //do i return the pointer or the object?
         return *this;
     }
@@ -68,6 +71,9 @@ public:
         array_ = nullptr;
         capacity_ = 0;
         curr_size_ = 0;
+    }
+    void setData(T* t) {
+        array_  =t;
     }
 
     // Get the number of items in the ABS

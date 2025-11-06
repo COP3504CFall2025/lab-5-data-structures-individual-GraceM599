@@ -19,8 +19,8 @@ private:
 public:
     // Big 5
     ABDQ() {
-        data_ = new T[1];
-        capacity_ = 1;
+        data_ = new T[4];
+        capacity_ = 4;
         size_ = 0;
         front_ = 0;
         back_ = 0;
@@ -34,13 +34,13 @@ public:
         back_ = 0;
     }
     ABDQ(const ABDQ& other) {
-        capacity_ = other.getCapacity();
-        size_ = other.getSize();
+        capacity_ = other.capacity_;
+        size_ = other.size_;
         data_ = new T[capacity_];
-        front_ = other.getFront();
+        front_ = 0;
         back_ = size_;
-        for (int i=0; i<size_; ++i ) {
-            data_[(front_ + i) % capacity_] = other.data_[(front_ + i) % capacity_];
+        for (std::size_t i = 0; i < size_; ++i) {
+            data_[i] = other.data_[(other.front_ + i) % other.capacity_];
         }
 
     }
@@ -57,16 +57,15 @@ public:
         other.capacity_ =0;
     }
     ABDQ& operator=(const ABDQ& other) {
-        if (this== &other) {
-            return *this;
-        }
-        capacity_ = other.getCapacity();
-        size_ = other.getSize();
+        if (this == &other) return *this;
+        delete[] data_;
+        capacity_ = other.capacity_;
+        size_ = other.size_;
         data_ = new T[capacity_];
-        front_ = other.getFront();
+        front_ = 0;
         back_ = size_;
-        for (int i=0; i<size_; ++i ) {
-            data_[(front_ + i) % capacity_] = other.getData()[(front_ + i) % capacity_];
+        for (std::size_t i = 0; i < size_; ++i) {
+            data_[i] = other.data_[(other.front_ + i) % other.capacity_];
         }
         return *this;
     }
@@ -98,40 +97,34 @@ public:
     void pushFront(const T& item) override {
         if (size_ >= capacity_) {
             ensureCapacity();
-            pushFront(item);
         }
-        else {
-            front_ = (front_ - 1 + capacity_) % capacity_;
-            data_[front_] = item;
-            size_++;
-        }
+        front_ = (front_ - 1 + capacity_) % capacity_;
+        data_[front_] = item;
+        size_++;
     }
     void pushBack(const T& item) override {
         if (size_ >= capacity_) {
             ensureCapacity();
-            pushBack(item);
         }
-        else {
-            data_[back_] = item;
-            back_ = (back_+1) % capacity_;
-
-            size_++;
-        }
+        data_[back_] = item;
+        back_ = (back_ + 1) % capacity_;
+        size_++;
     }
 
     // Deletion
     T popFront() override {
-        int t = front_;
+        if (size_ == 0) throw std::runtime_error("Deque is empty");
+        T temp = data_[front_];
         front_ = (front_ + 1) % capacity_;
         size_--;
-
-        return data_[t];
+        return temp;
     }
     T popBack() override {
-        int t = back_;
-        back_ = (back_-1 + capacity_) % capacity_;
+        if (size_ == 0) throw std::runtime_error("Deque is empty");
+        back_ = (back_ - 1 + capacity_) % capacity_;
+        T temp = data_[back_];
         size_--;
-        return data_[t];
+        return temp;
     }
     void ensureCapacity() {
 
@@ -147,10 +140,12 @@ public:
     }
     // Access
     const T& front() const override {
+        if (size_ == 0) throw std::runtime_error("Deque is empty");
         return data_[front_];
     }
     const T& back() const override {
-        return data_[back_];
+        if (size_ == 0) throw std::runtime_error("Deque is empty");
+        return data_[(back_ - 1 + capacity_) % capacity_];
     }
 
     // Getters

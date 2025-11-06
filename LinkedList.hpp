@@ -138,7 +138,7 @@ public:
 		}
 
 	}
-	void Clear() {
+	void clear() {
 		Node* current = head;
 		while (current != nullptr) {
 			Node* temp = current->next;
@@ -158,7 +158,7 @@ public:
 			return *this;
 		}
 		else {
-			Clear();
+			clear();
 			count = other.getCount();
 			head = other.getHead();
 			tail = other.getTail();
@@ -173,7 +173,7 @@ public:
 		if (this == &rhs) {
 			return *this;
 		}
-		Clear();
+		clear();
 		const Node* current = rhs.getHead();
 		while (current  != nullptr) {
 			addTail(current->data);

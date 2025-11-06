@@ -36,6 +36,18 @@ int main() {
     smth.addTail(112);
     smth.printForward();
 
+    LinkedList<int> second = LinkedList<int>();
+    second.addTail(11);
+    second.addHead(89);
+    LinkedList<int> third = second;
+    third.printReverse();
+
+    smth = second;
+    smth.printForward();
+
+
+
+
     //smth.Clear();
     //smth.printForward();
 

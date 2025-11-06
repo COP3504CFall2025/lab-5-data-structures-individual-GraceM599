@@ -154,7 +154,6 @@ public:
 	// Operators
 	LinkedList<T>& operator=(LinkedList<T>&& other) noexcept {
 
-		this->count = other->count;
 		if (&other == this) {
 			return *this;
 		}
@@ -175,7 +174,7 @@ public:
 			return *this;
 		}
 		Clear();
-		Node* current = rhs.getHead();
+		const Node* current = rhs.getHead();
 		while (current  != nullptr) {
 			addTail(current->data);
 			current = current->next;
@@ -191,9 +190,11 @@ public:
 
 	}
 	LinkedList(const LinkedList<T>& list) {
-
+		head = nullptr;
+		tail = nullptr;
+		count = 0;
 		Node* current = list.head;
-		while (current) {
+		while (current != nullptr) {
 			addTail(current->data);
 			current = current->next;
 		}

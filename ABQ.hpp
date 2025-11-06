@@ -19,7 +19,7 @@ public:
     // Constructors + Big 5
     ABQ() {
         curr_size_ =0;
-        capacity_ =0;
+        capacity_ =1;
         array_ = nullptr;
     }
     explicit ABQ(const size_t capacity) {
@@ -36,8 +36,12 @@ public:
         }
     }
     ABQ& operator=(const ABQ& rhs) {
+        if (this == &rhs) {
+            return *this;
+        }
         curr_size_ = rhs.getSize();
         capacity_ = rhs.getMaxCapacity();
+        delete[] array_;
         array_ = new T[capacity_];
         for (int i=0; i<curr_size_; ++i) {
             array_[i] = rhs.getData()[i];
@@ -48,16 +52,23 @@ public:
         curr_size_ = other.getSize();
         capacity_ = other.getMaxCapacity();
         array_ = other.getData();
+        other.setData(nullptr);
+        other.curr_size_ = 0;
+        other.capacity_= 0;
 
     }
     ABQ& operator=(ABQ&& rhs) noexcept {
-        if (this == rhs) {
+        if (this == &rhs) {
             return *this;
         }
         else {
-            curr_size_ = other.getSize();
-            capacity_ = other.getMaxCapacity();
-            array_ = other.getData();
+            capacity_ = rhs.getMaxCapacity();
+            curr_size_= rhs.getSize();
+            delete[] array_;
+            array_ = rhs.getData();
+            rhs.array_ = nullptr;
+            rhs.curr_size_ = 0;
+            rhs.capacity_ = 0;
         }
         return *this;
     }
@@ -84,7 +95,7 @@ public:
     void enqueue(const T& data) override
     {
         if (capacity_ <= curr_size_) {
-            T* temp = new T[capacity_*2];
+            T* temp = new T[capacity_*scale_factor_];
             for (int i=0; i<curr_size_; ++i) {
                 temp[i] = array_[i];
             }
@@ -103,10 +114,15 @@ public:
 
     // Deletion
     T dequeue() override {
+        if (curr_size_ == 0) {
+            throw std::runtime_error("Empty ABS");
+        }
+        T temp = array_[0];
         for (int i=1; i<curr_size_; ++i) {
-            array_[i-1] = array[i];
+            array_[i-1] = array_[i];
         }
         curr_size_ -=1;
+        return temp;
     }
 
 };

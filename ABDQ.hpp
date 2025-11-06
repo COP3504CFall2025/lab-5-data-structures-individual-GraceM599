@@ -20,7 +20,7 @@ public:
     // Big 5
     ABDQ() {
         data_ = nullptr;
-        capacity_ = 0;
+        capacity_ = 1;
         size_ = 0;
         front_ = 0;
         back_ = 0;
@@ -63,9 +63,7 @@ public:
         front_ = other.getFront();
         back_ = size_;
         for (int i=0; i<size_; ++i ) {
-            data_[(front_ + i) % size_] = other.front();
-            front_ = (front_ +1)%size_;
-            //other.setFront(front_);
+            data_[(front_ + i) % size_] = other.getData()[(front_ + i) % size_];
         }
         return *this;
     }
@@ -78,6 +76,12 @@ public:
         data_ = other.getData();
         front_ = other.getFront();
         back_ = other.getBack();
+
+        other.data_ = nullptr;
+        other.size_=0;
+        other.front_ = 0;
+        other.back_ = 0;
+        other.capacity_ =0;
         return *this;
     }
     ~ABDQ() override {
@@ -87,20 +91,80 @@ public:
     }
 
     // Insertion
-    void pushFront(const T& item) override;
-    void pushBack(const T& item) override;
+    void pushFront(const T& item) override {
+        if (size_ >= capacity_) {
+            ensureCapacity();
+            pushFront(item);
+        }
+        if (front_ != 0) {
+            data_[front_-1] = item;
+            front_ -=1;
+            size_ +=1;
+        }
+        else {
+            for (int i=size_; i>0; --i) {
+                data_[i] = data_[i-1];
+            }
+            data_[0] = item;
+            front_ = 0;
+            back_ = size_;
+            size_++;
+        }
+    }
+    void pushBack(const T& item) override {
+        if (size_ >= capacity_) {
+            ensureCapacity();
+            pushBack(item);
+        }
+        if (back_ != capacity_-2) {
+            data_[back_+1] = item;
+            back_ +=1;
+            size_ +=1;
+        }
+        else {
+            for (int i=1; i<back_; --i) {
+                data_[i-1] = data_[i];
+            }
+            data_[back_] = item;
+            front_--;
+            back_++;
+            size_++;
+        }
+    }
 
     // Deletion
-    T popFront() override;
-    T popBack() override;
-
+    T popFront() override {
+        front_++;
+        return data_[front_-1];
+    }
+    T popBack() override {
+        back_--;
+        return data_[back_++];
+    }
+    void ensureCapacity() {
+        capacity_ *=2;
+        T* temp = new T[capacity_];
+        for (int i=0; i<size_; i++) {
+            temp[i] = data_[i];
+        }
+        delete[] data_;
+        data_ = temp;
+    }
     // Access
-    const T& front() const override;
-    const T& back() const override;
+    const T& front() const override {
+        return data_[front_];
+    }
+    const T& back() const override {
+        return data_[back_];
+    }
 
     // Getters
-    std::size_t getSize() const noexcept override;
-    std::size_t getCapacity() const noexcept;
+    std::size_t getSize() const noexcept override {
+        return size_;
+    }
+    std::size_t getCapacity() const noexcept {
+        return capacity_;
+    }
     T* getData() const noexcept {
         return data_;
     }

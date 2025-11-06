@@ -30,6 +30,9 @@ public:
 
     // Access
     T peek() const override {
+        if (list.getCount() == 0) {
+            throw std::runtime_error("Empty LLS");
+        }
         return (list.getTail())->data;
     }
 

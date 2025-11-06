@@ -37,4 +37,9 @@ public:
     std::size_t getSize() const noexcept override {
         return list.getCount();
     }
+
+    ~LLS() {
+        list.~LinkedList();
+
+    }
 };

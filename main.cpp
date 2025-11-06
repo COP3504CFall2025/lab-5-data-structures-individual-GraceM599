@@ -1,5 +1,6 @@
-#ifdef MAIN
-
+//#ifdef MAIN
+#include "LinkedList.hpp"
+/*
 #include "ABDQ.hpp"
 #include "ABQ.hpp"
 #include "ABS.hpp"
@@ -8,6 +9,7 @@
 #include "LLDQ.hpp"
 #include "LLQ.hpp"
 #include "LLS.hpp"
+*/
 #include <iostream>
 
 /*
@@ -20,9 +22,25 @@
 
 int main() {
 
+    LinkedList<int> smth = LinkedList<int>();
+    smth.addHead(4);
+    smth.addHead(2);
+    smth.printForward();
+    smth.removeTail();
+    smth.removeHead();
+    smth.printForward();
+
+    smth.addTail(3);
+    std::cout << smth.getTail() << std::endl;
+    smth.addHead(11);
+    smth.addTail(112);
+    smth.printForward();
+
+    //smth.Clear();
+    //smth.printForward();
 
     return 0;
 }
 
 
-#endif
+//#endif

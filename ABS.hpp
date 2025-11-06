@@ -12,7 +12,7 @@ class ABS : public StackInterface<T> {
 public:
     // Big 5 + Parameterized Constructor
     ABS() {
-        capacity_ =0;
+        capacity_ = 1;
         curr_size_ = 0;
         array_ = nullptr;
     }
@@ -37,8 +37,9 @@ public:
         }
         capacity_ = rhs.getMaxCapacity();
         curr_size_ = rhs.getSize();
+        delete[] array_;
         array_ = new T[capacity_];
-        for (int i=0; i<capacity_; ++i) {
+        for (int i=0; i<curr_size_; ++i) {
             // [] dereferences the pointer and gives a value not pointer
             array_[i] = rhs.getData()[i];
         }
@@ -50,6 +51,8 @@ public:
         curr_size_= other.getSize();
         array_ = other.getData();
         other.setData(nullptr);
+        other.curr_size_ = 0;
+        other.capacity_= 0;
         //do i not have to set things to nullptr??? no setters...
 
     }
@@ -62,6 +65,8 @@ public:
         delete[] array_;
         array_ = rhs.getData();
         rhs.setData(nullptr);
+        rhs.curr_size_ = 0;
+        rhs.capacity_ = 0;
 
         //do i return the pointer or the object?
         return *this;

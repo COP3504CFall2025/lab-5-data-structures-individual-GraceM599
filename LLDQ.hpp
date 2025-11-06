@@ -27,11 +27,17 @@ public:
 
     // Core Removal Operations
     T popFront() override {
+        if (list.getCount() == 0) {
+            throw std::runtime_error("Empty LLS");
+        }
         T temp = (list.getHead())->data;
         list.removeHead();
         return temp;
     }
     T popBack() override {
+        if (list.getCount() == 0) {
+            throw std::runtime_error("Empty LLS");
+        }
         T temp = (list.getTail())->data;
         list.removeTail();
         return temp;

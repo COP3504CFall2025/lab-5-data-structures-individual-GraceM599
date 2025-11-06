@@ -21,7 +21,7 @@ public:
     // Deletion
     T pop() override {
         if (list.getCount() == 0) {
-            throw std::out_of_range("Empty LLS");
+            throw std::runtime_error("Empty LLS");
         }
         T temp = (list.getTail())->data;
         list.removeTail();
@@ -30,7 +30,7 @@ public:
 
     // Access
     T peek() const override {
-        return list.getTail();
+        return (list.getTail())->data;
     }
 
     //Getters

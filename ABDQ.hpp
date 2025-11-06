@@ -40,9 +40,7 @@ public:
         front_ = other.getFront();
         back_ = size_;
         for (int i=0; i<size_; ++i ) {
-            data_[(front_ + i) % size_] = other.front();
-            front_ = (front_ +1)%size_;
-            other.setFront(front_);
+            data_[(front_ + i) % size_] = other.data_[(front_ + i) % size_];
         }
 
     }
@@ -175,9 +173,7 @@ public:
         return back_;
     }
 
-    void setFront(std::size_t index) {
-        front_ = index;
-    }
+
 
 
 };

@@ -40,9 +40,6 @@ public:
     std::size_t getSize() const noexcept override {
         return list.count;
     }
-    ~LLQ() {
-        list.~LinkedList();
 
-    }
 
 };

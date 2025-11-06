@@ -38,8 +38,5 @@ public:
         return list.getCount();
     }
 
-    ~LLS() {
-        list.~LinkedList();
 
-    }
 };

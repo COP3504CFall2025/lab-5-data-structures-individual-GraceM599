@@ -93,7 +93,7 @@ public:
         }
         else if (curr_size_ >= capacity_) {
             capacity_ *= scale_factor_;
-            temp = array_;
+            T* temp = array_;
             array_ = new T[capacity_];
             for (int i=0; i<curr_size_; ++i) {
                 array_[i] = temp[i];

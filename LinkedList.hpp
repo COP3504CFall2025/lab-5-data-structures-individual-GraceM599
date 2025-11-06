@@ -160,9 +160,9 @@ public:
 		}
 		else {
 			Clear();
-			count = other->count;
-			head = other->head;
-			tail = other->tail;
+			count = other.getCount();
+			head = other.getHead();
+			tail = other.getTail();
 			other.head = nullptr;
 			other.tail = nullptr;
 			other.count = 0;
@@ -201,8 +201,6 @@ public:
 
 	}
 	LinkedList(LinkedList<T>&& other) noexcept {
-		this->count = other->count;
-
 
 		count = other.getCount();
 		head = other.getHead();

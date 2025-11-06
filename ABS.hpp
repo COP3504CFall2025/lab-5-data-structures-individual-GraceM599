@@ -98,7 +98,7 @@ public:
 
     // Push item onto the stack
     void push(const T& data) override {
-        if (curr_size_ ==0 || array_ ==nullptr) {
+        if (capacity_ ==0 || array_ ==nullptr) {
             array_ = new T[1];
             capacity_ =1;
         }
@@ -130,8 +130,8 @@ public:
 
         T temp = array_[curr_size_-1];
         curr_size_ -=1;
-        if (2* curr_size_ < capacity_ && curr_size_ > 0) {
-            capacity_ /= 2;
+        if (2* curr_size_ < capacity_) {
+            capacity_ = std::max<int>(1, capacity_ / 2);
             T* sec = new T[capacity_];
 
             for (int i = 0; i < curr_size_; ++i) {

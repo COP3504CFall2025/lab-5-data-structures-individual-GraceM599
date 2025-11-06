@@ -19,7 +19,7 @@ private:
 public:
     // Big 5
     ABDQ() {
-        data_ = nullptr;
+        data_ = new T[1];
         capacity_ = 1;
         size_ = 0;
         front_ = 0;
@@ -94,19 +94,10 @@ public:
             ensureCapacity();
             pushFront(item);
         }
-        if (front_ != 0) {
-            data_[front_-1] = item;
-            front_ -=1;
-            size_ +=1;
-        }
         else {
-            for (int i=size_; i>0; --i) {
-                data_[i] = data_[i-1];
-            }
-            data_[0] = item;
-            front_ = 0;
-            back_ = size_;
-            size_++;
+            front_ = (front_ - 1 +capacity_) % capacity_;
+            data_[front_] = item;
+            size++;
         }
     }
     void pushBack(const T& item) override {
@@ -114,37 +105,33 @@ public:
             ensureCapacity();
             pushBack(item);
         }
-        if (back_ != capacity_-2) {
-            data_[back_+1] = item;
-            back_ +=1;
-            size_ +=1;
-        }
         else {
-            for (int i=1; i<back_; --i) {
-                data_[i-1] = data_[i];
-            }
+            back_ = (back_+1) % capacity_;
             data_[back_] = item;
-            front_--;
-            back_++;
             size_++;
         }
     }
 
     // Deletion
     T popFront() override {
-        front_++;
+        front_ = (front_ + 1) % capacity_;
+        size_--;
+
         return data_[front_-1];
     }
     T popBack() override {
-        back_--;
+        back_ = (back_-1 + capacity_) % capacity_;
+        size_--;
         return data_[back_++];
     }
     void ensureCapacity() {
         capacity_ *=2;
         T* temp = new T[capacity_];
         for (int i=0; i<size_; i++) {
-            temp[i] = data_[i];
+            temp[i] = data_[(front_ + i) % capacity_];
         }
+        front_ = 0;
+        back_ = size_;
         delete[] data_;
         data_ = temp;
     }

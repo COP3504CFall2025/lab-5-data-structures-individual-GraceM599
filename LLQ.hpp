@@ -30,12 +30,19 @@ public:
 
     // Access
     T peek() const override {
-        return list.getHead();
+        if (list.getCount() == 0) {
+            throw std::runtime_error("Empty LLS");
+        }
+        return (list.getHead())->data;
     }
 
     // Getter
     std::size_t getSize() const noexcept override {
         return list.count;
+    }
+    ~LLQ() {
+        list.~LinkedList();
+
     }
 
 };

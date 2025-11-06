@@ -45,15 +45,25 @@ public:
 
     // Element Accessors
     const T& front() const override {
+        if (list.getCount() == 0) {
+            throw std::runtime_error("Empty LLS");
+        }
         return (list.getHead())->data;
     }
     const T& back() const override {
+        if (list.getCount() == 0) {
+            throw std::runtime_error("Empty LLS");
+        }
         return (list.getTail())->data;
     }
 
     // Getter
     std::size_t getSize() const noexcept override {
         return list.getCount();
+    }
+    ~LLDQ() {
+        list.~LinkedList();
+
     }
 };
 

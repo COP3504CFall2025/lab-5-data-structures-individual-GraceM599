@@ -65,7 +65,7 @@ public:
         for (int i=0; i<size_; ++i ) {
             data_[(front_ + i) % size_] = other.front();
             front_ = (front_ +1)%size_;
-            other.setFront(front_);
+            //other.setFront(front_);
         }
         return *this;
     }

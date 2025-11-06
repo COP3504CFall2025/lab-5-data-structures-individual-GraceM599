@@ -54,7 +54,7 @@ public:
         back_ = other.getBack();
     }
     ABDQ& operator=(const ABDQ& other) {
-        if (this== other) {
+        if (this== &other) {
             return *this;
         }
         capacity_ = other.getCapacity();
@@ -70,7 +70,7 @@ public:
         return *this;
     }
     ABDQ& operator=(ABDQ&& other) noexcept {
-        if (other==this) {
+        if (&other==this) {
             return *this;
         }
         capacity_ = other.getCapacity();
@@ -101,7 +101,7 @@ public:
     // Getters
     std::size_t getSize() const noexcept override;
     std::size_t getCapacity() const noexcept;
-    T& getData() const noexcept {
+    T* getData() const noexcept {
         return data_;
     }
     std::size_t getFront() const noexcept {

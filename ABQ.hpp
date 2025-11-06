@@ -12,7 +12,7 @@ class ABQ : public QueueInterface<T>{
 
     size_t capacity_;
     size_t curr_size_;
-    T* array_;;
+    T* array_;
     static constexpr size_t scale_factor_ = 2;
 
 public:
@@ -85,7 +85,7 @@ public:
         return curr_size_;
     }
     [[nodiscard]] size_t getMaxCapacity() const noexcept {
-        return curr_size_;
+        return capacity_;
     }
     [[nodiscard]] T* getData() const noexcept {
         return array_;
@@ -94,8 +94,12 @@ public:
     // Insertion
     void enqueue(const T& data) override
     {
+        if (array_ == nullptr) {
+            array_ = new T[1];
+        }
         if (capacity_ <= curr_size_) {
-            T* temp = new T[capacity_*scale_factor_];
+            capacity_ *= scale_factor_;
+            T* temp = new T[capacity_];
             for (int i=0; i<curr_size_; ++i) {
                 temp[i] = array_[i];
             }
@@ -109,13 +113,16 @@ public:
 
     // Access
     T peek() const override {
-        return array_[curr_size_];
+        if (curr_size_ == 0) {
+            throw std::runtime_error("Empty ABQ");
+        }
+        return array_[0];
     }
 
     // Deletion
     T dequeue() override {
         if (curr_size_ == 0) {
-            throw std::runtime_error("Empty ABS");
+            throw std::runtime_error("Empty ABQ");
         }
         T temp = array_[0];
         for (int i=1; i<curr_size_; ++i) {

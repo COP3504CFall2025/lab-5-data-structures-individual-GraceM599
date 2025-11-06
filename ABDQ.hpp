@@ -27,7 +27,7 @@ public:
 
     }
     explicit ABDQ(std::size_t capacity) {
-        data_ = nullptr;
+        data_ = new T[capacity];
         capacity_ = capacity;
         size_ = 0;
         front_ = 0;
@@ -95,8 +95,8 @@ public:
             pushFront(item);
         }
         else {
-            front_ = (front_ - 1 +capacity_) % capacity_;
             data_[front_] = item;
+            front_ = (front_ - 1 +capacity_) % capacity_;
             size_++;
         }
     }
@@ -106,30 +106,34 @@ public:
             pushBack(item);
         }
         else {
-            back_ = (back_+1) % capacity_;
             data_[back_] = item;
+            back_ = (back_+1) % capacity_;
+
             size_++;
         }
     }
 
     // Deletion
     T popFront() override {
+        int t = front_;
         front_ = (front_ + 1) % capacity_;
         size_--;
 
-        return data_[front_-1];
+        return data_[t];
     }
     T popBack() override {
+        int t = back_;
         back_ = (back_-1 + capacity_) % capacity_;
         size_--;
-        return data_[back_++];
+        return data_[t];
     }
     void ensureCapacity() {
-        capacity_ *=2;
-        T* temp = new T[capacity_];
+
+        T* temp = new T[capacity_*2];
         for (int i=0; i<size_; i++) {
             temp[i] = data_[(front_ + i) % capacity_];
         }
+        capacity_ *=2;
         front_ = 0;
         back_ = size_;
         delete[] data_;

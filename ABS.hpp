@@ -26,13 +26,13 @@ public:
         capacity_ = other.getMaxCapacity();
         curr_size_ = other.getSize();
         array_ = new T[capacity_];
-        for (int i=0; i<capacity_; ++i) {
+        for (int i=0; i<curr_size_; ++i) {
             array_[i] = other.getData()[i];
         }
     }
     ABS& operator=(const ABS& rhs) {
         //copy assignment operator
-        if (this == rhs) {
+        if (this == &rhs) {
             return *this;
         }
         capacity_ = rhs.getMaxCapacity();
@@ -53,6 +53,9 @@ public:
 
     }
     ABS& operator=(ABS&& rhs) noexcept {
+        if (this == &rhs) {
+            return *this;
+        }
         capacity_ = rhs.getMaxCapacity();
         curr_size_= rhs.getSize();
         array_ = rhs.getData();
@@ -83,7 +86,11 @@ public:
 
     // Push item onto the stack
     void push(const T& data) override {
-        if (curr_size_ >= capacity_) {
+        if (curr_size_ ==0 || array_ ==nullptr) {
+            array_ = new T[1];
+            capacity_ =1;
+        }
+        else if (curr_size_ >= capacity_) {
             capacity_ *= scale_factor_;
             delete[] array_;
             array_ = new T[capacity_];
@@ -93,10 +100,16 @@ public:
     }
 
     T peek() const override {
+        if (curr_size_ == 0) {
+            throw std::runtime_error("Empty ABS");
+        }
         return array_[curr_size_];
     }
 
     T pop() override {
+        if (curr_size_ == 0) {
+            throw std::runtime_error("Empty ABS");
+        }
         T temp = array_[curr_size_];
         curr_size_ -=1;
         return temp;

@@ -129,6 +129,18 @@ public:
             array_[i-1] = array_[i];
         }
         curr_size_ -=1;
+
+        if (2* curr_size_ < capacity_) {
+            capacity_ = std::max<int>(1, capacity_ / 2);
+            T* sec = new T[capacity_];
+
+            for (int i = 0; i < curr_size_; ++i) {
+                sec[i] = array_[i];
+            }
+
+            delete[] array_;
+            array_ = sec;
+        }
         return temp;
     }
 

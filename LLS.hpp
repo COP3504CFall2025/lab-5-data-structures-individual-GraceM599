@@ -20,7 +20,10 @@ public:
 
     // Deletion
     T pop() override {
-        T temp = list.getTail();
+        if (list.getCount() == 0) {
+            throw std::out_of_range("Empty LLS");
+        }
+        T temp = (list.getTail())->data;
         list.removeTail();
         return temp;
     }

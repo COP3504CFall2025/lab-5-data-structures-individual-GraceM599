@@ -20,7 +20,7 @@ public:
 
     // Deletion
     T dequeue() override {
-        T temp = list.getHead();
+        T temp = (list.getHead())->data;
         list.removeHead();
         return temp;
     }
